@@ -1,0 +1,79 @@
+import React from "react";
+import { useHistory } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { userLogin } from "../services/auth/registration-and-login";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Button, Form } from "react-bootstrap";
+import Header from "../components/Header";
+
+function Login() {
+  const history = useHistory();
+  function goToHome() {
+    history.push("/");
+  }
+
+  const cookies = new Cookies();
+
+  const confirmCookie = cookies.get("token");
+  if (confirmCookie) {
+    history.push("/login/profile");
+  }
+
+  function onSubmit(event) {
+    event.preventDefault();
+
+    const loginData = {
+      email: event.target.email.value,
+      password: event.target.password.value,
+    };
+
+    userLogin(loginData).then((response) => {
+      if (response.status === 200) {
+        const JWT = response.data.token;
+        cookies.set("token", JWT, {
+          path: "/",
+        });
+        history.push("/login/profile");
+      }
+    });
+  }
+
+  return (
+    <Container>
+      <Header />
+      <h1>Login</h1>
+
+      <form onSubmit={onSubmit}>
+        <Row style={{ maxWidth: "300px" }}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Your E-mail and Password</Form.Label>
+            <Form.Control
+              name="email"
+              type="email"
+              placeholder="Enter your e-mail"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Control
+              name="password"
+              type="password"
+              placeholder="Enter your Password"
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+        </Row>
+      </form>
+
+      <br />
+      <Button onClick={goToHome} variant="outline-secondary">
+        Back
+      </Button>
+    </Container>
+  );
+}
+
+export default Login;
