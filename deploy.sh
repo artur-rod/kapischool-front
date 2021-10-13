@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cd kapischool-back
+cd kapischool-front
 git pull
 
-sudo pm2 stop react-scripts start
+sudo pm2 stop kapischool
 sudo npm install
-sudo pm2 start react-scripts start
+sudo pm2 serve build/ 3000 --name "kapischool" --spa
