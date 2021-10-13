@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listAll } from "../services/courses";
 
 import { useHistory } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import Cookies from "universal-cookie";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Card, Button, Col, Row } from "react-bootstrap";
@@ -10,7 +10,8 @@ import Header from "../components/Header";
 import { Alert } from "../components/Alert";
 
 const Courses = () => {
-  const confirmCookies = useCookies("token")[0].token;
+  const cookies = new Cookies();
+  const confirmCookies = cookies.get("token");
 
   const history = useHistory();
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 
 import { listAll } from "../services/balance";
@@ -12,7 +12,8 @@ import { Alert } from "../components/Alert";
 import Header from "../components/Header";
 
 export default function Balance() {
-  const confirmCookies = useCookies("token")[0].token;
+  const cookies = new Cookies();
+  const confirmCookies = cookies.get("token");
 
   const history = useHistory();
 
