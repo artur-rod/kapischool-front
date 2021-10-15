@@ -1,8 +1,8 @@
 import React from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
-import { payment } from "../services/payment";
-import { cancelCharge } from "../services/charge";
+import { payment } from "../services/payment/payment";
+import { cancelCharge } from "../services/payment/charge";
 import Header from "../components/Header";
 
 import "bootstrap/dist/css/bootstrap.min.css";

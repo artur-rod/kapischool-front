@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
 import Header from "../components/Header";
-import { createCharge } from "../services/charge";
+import { createCharge } from "../services/payment/charge";
 
 const Payment = () => {
   const history = useHistory();

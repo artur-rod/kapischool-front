@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 
-import { listAll } from "../services/balance";
-import { listCharges } from "../services/charge";
+import { listAll } from "../services/payment/balance";
+import { listCharges } from "../services/payment/charge";
 import CreateCourse from "../components/CreateCourse";
 
 import "bootstrap/dist/css/bootstrap.min.css";
