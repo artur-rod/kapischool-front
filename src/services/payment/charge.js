@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../authenticated-api";
 
 async function listCharges() {
   const charges = await api.get("/charges");

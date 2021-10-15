@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../authenticated-api";
 
 async function payment(body) {
   const newPayment = await api.post("/payment", body);

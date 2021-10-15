@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./authenticated-api";
 
 async function listAll() {
   const courses = api.get("/courses");

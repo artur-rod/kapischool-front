@@ -1,16 +1,16 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+import Cookies from "universal-cookie";
+import Header from "../components/Header";
+import SweetAlert from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Button, Form } from "react-bootstrap";
+
 import {
   userLogin,
   userRegistration,
 } from "../services/auth/registration-and-login";
-import Cookies from "universal-cookie";
-
-import Header from "../components/Header";
-
-import SweetAlert from "sweetalert2";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button, Form } from "react-bootstrap";
+import { mailer } from "../services";
 
 function Register() {
   const history = useHistory();
@@ -30,14 +30,16 @@ function Register() {
     };
 
     const loginData = {
-      name: event.target.name.value,
       email: event.target.email.value,
       password: event.target.password.value,
     };
 
+    console.log([{ email: registrationData.email }]);
+
     userRegistration(registrationData)
       .then((response) => {
         if (response.status === 200) {
+          mailer.registration([{ email: registrationData.email }]);
           SweetAlert.fire({
             type: "success",
             title: "Registration Success!",

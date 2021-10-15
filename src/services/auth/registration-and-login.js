@@ -1,4 +1,4 @@
-import api from "./auth-api";
+import api from "../api";
 
 async function userRegistration(body) {
   const register = await api.post("/user/register", body);

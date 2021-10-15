@@ -7,6 +7,8 @@ import { Container, Row, Button, Form } from "react-bootstrap";
 import Header from "../components/Header";
 import { createCharge } from "../services/payment/charge";
 
+import { profile } from "../services";
+
 const Payment = () => {
   const history = useHistory();
 
@@ -39,6 +41,11 @@ const Payment = () => {
         },
       },
     };
+    const profileData = Object.create(null);
+    Object.assign(profileData, {
+      email: payloadData.billing.email,
+      address: payloadData.billing.address,
+    });
 
     createCharge(payloadData).then((response) => {
       if (response.status === 200) {
@@ -51,6 +58,9 @@ const Payment = () => {
         cookies.set("address", payloadData.billing.address, {
           path: "/charges",
         });
+        console.log(profileData);
+        console.log(payloadData);
+        profile.addressUpdate(profileData);
 
         history.push("/charges/payment");
       }

@@ -1,13 +1,14 @@
 import React from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
-import { payment } from "../services/payment/payment";
-import { cancelCharge } from "../services/payment/charge";
 import Header from "../components/Header";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
 import { Alert } from "../components/Alert";
+
+import { payment } from "../services/payment/payment";
+import { cancelCharge } from "../services/payment/charge";
+import { mailer, profile } from "../services";
 
 const Payment = () => {
   const history = useHistory();
@@ -60,6 +61,12 @@ const Payment = () => {
 
     payment(paymentData).then((response) => {
       if (response.status === 200) {
+        mailer.purchase([{ email: email }]);
+        profile.coursesUpdate({
+          email: email,
+          paymentId: response.data.id,
+        });
+
         cookies.set("paymentId", response.data.id, {
           path: "/login",
         });
