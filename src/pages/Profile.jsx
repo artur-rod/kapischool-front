@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button } from "react-bootstrap";
 import Header from "../components/Header";
 import { Alert } from "../components/Alert";
-import { refund } from "../services/payment";
+import { refund } from "../services/payment/payment";
 
 const Profile = () => {
   const cookies = new Cookies();
