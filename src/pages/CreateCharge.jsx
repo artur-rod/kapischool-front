@@ -7,7 +7,7 @@ import { Container, Row, Button, Form } from "react-bootstrap";
 import Header from "../components/Header";
 import { createCharge } from "../services/payment/charge";
 
-import { profile } from "../services";
+import { profile, CEP } from "../services";
 
 const Payment = () => {
   const history = useHistory();
@@ -17,6 +17,22 @@ const Payment = () => {
   }
 
   const cookies = new Cookies();
+
+  function searchCEP(event) {
+    event.preventDefault();
+    const cepInput = document.getElementsByClassName("address")[0].value;
+
+    const cep = {
+      cep: cepInput,
+    };
+
+    CEP.get(cep).then((response) => {
+      document.getElementsByClassName("address")[1].value = response.data.end;
+      document.getElementsByClassName("address")[2].value =
+        response.data.cidade;
+      document.getElementsByClassName("address")[3].value = response.data.uf;
+    });
+  }
 
   function onSubmit(event) {
     event.preventDefault();
@@ -98,10 +114,24 @@ const Payment = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Address</Form.Label>
+            <Row>
+              <Form.Control
+                name="postCode"
+                type="number"
+                placeholder="PostCode"
+                className="address"
+                required
+              />
+              <Button variant="primary" onClick={searchCEP}>
+                Search
+              </Button>
+            </Row>
+            <br />
             <Form.Control
               name="street"
               type="text"
               placeholder="Street"
+              className="address"
               required
             />
             <Form.Control
@@ -110,17 +140,18 @@ const Payment = () => {
               placeholder="Number"
               required
             />
-            <Form.Control name="city" type="text" placeholder="City" required />
+            <Form.Control
+              name="city"
+              type="text"
+              placeholder="City"
+              className="address"
+              required
+            />
             <Form.Control
               name="state"
               type="text"
               placeholder="State"
-              required
-            />
-            <Form.Control
-              name="postCode"
-              type="number"
-              placeholder="PostCode"
+              className="address"
               required
             />
           </Form.Group>
