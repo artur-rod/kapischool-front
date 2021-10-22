@@ -5,6 +5,7 @@ import { adminLogin } from "../services/auth/registration-and-login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
+import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
     history.push("/dashboard");
   }
 
-  function onSubmit(event) {
+  async function onSubmit(event) {
     event.preventDefault();
 
     const loginData = {
@@ -29,20 +30,26 @@ function Login() {
       password: event.target.password.value,
     };
 
-    adminLogin(loginData).then((response) => {
-      if (response.status === 200) {
-        console.log(response.data);
-        const JWT = response.data.token;
-        const email = response.data.admin.email;
-        cookies.set("token", JWT, {
-          path: "/",
-        });
-        cookies.set("email", email, {
-          path: "/charges",
-        });
-        history.push("/dashboard");
-      }
-    });
+    try {
+      const login = await adminLogin(loginData);
+
+      const JWT = login.data.token;
+      const email = login.data.admin.email;
+      cookies.set("token", JWT, {
+        path: "/",
+      });
+      cookies.set("email", email, {
+        path: "/charges",
+      });
+
+      history.push("/dashboard");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Login Failed",
+        text: "Incorrect email or password",
+      });
+    }
   }
 
   return (

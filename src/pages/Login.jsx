@@ -5,6 +5,7 @@ import { userLogin } from "../services/auth/registration-and-login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
+import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 
 function Login() {
@@ -20,7 +21,7 @@ function Login() {
     history.push("/login/profile");
   }
 
-  function onSubmit(event) {
+  async function onSubmit(event) {
     event.preventDefault();
 
     const loginData = {
@@ -28,15 +29,20 @@ function Login() {
       password: event.target.password.value,
     };
 
-    userLogin(loginData).then((response) => {
-      if (response.status === 200) {
-        const JWT = response.data.token;
-        cookies.set("token", JWT, {
-          path: "/",
-        });
-        history.push("/login/profile");
-      }
-    });
+    try {
+      const login = await userLogin(loginData);
+      const JWT = login.data.token;
+      cookies.set("token", JWT, {
+        path: "/",
+      });
+      history.push("/");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Login Failed",
+        text: "Incorrect email or password",
+      });
+    }
   }
 
   return (
@@ -52,6 +58,7 @@ function Login() {
               name="email"
               type="email"
               placeholder="Enter your e-mail"
+              required
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -59,6 +66,7 @@ function Login() {
               name="password"
               type="password"
               placeholder="Enter your Password"
+              required
             />
           </Form.Group>
 

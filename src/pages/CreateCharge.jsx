@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
+import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import { createCharge } from "../services/payment/charge";
 
@@ -34,7 +35,7 @@ const Payment = () => {
     });
   }
 
-  function onSubmit(event) {
+  async function onSubmit(event) {
     event.preventDefault();
 
     const payloadData = {
@@ -63,24 +64,28 @@ const Payment = () => {
       address: payloadData.billing.address,
     });
 
-    createCharge(payloadData).then((response) => {
-      if (response.status === 200) {
-        cookies.set("chargeId", response.data.id, {
-          path: "/charges",
-        });
-        cookies.set("email", payloadData.billing.email, {
-          path: "/charges",
-        });
-        cookies.set("address", payloadData.billing.address, {
-          path: "/charges",
-        });
-        console.log(profileData);
-        console.log(payloadData);
-        profile.addressUpdate(profileData);
+    try {
+      const charge = await createCharge(payloadData);
 
-        history.push("/charges/payment");
-      }
-    });
+      cookies.set("chargeId", charge.data.id, {
+        path: "/charges",
+      });
+      cookies.set("email", payloadData.billing.email, {
+        path: "/charges",
+      });
+      cookies.set("address", payloadData.billing.address, {
+        path: "/charges",
+      });
+      await profile.addressUpdate(profileData);
+
+      history.push("/charges/payment");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Opps... Something went wrong",
+        text: "Try again later",
+      });
+    }
   }
 
   return (

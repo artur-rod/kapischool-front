@@ -2,6 +2,7 @@ import React from "react";
 import { createCourse } from "../services/courses";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import SweetAlert from "sweetalert2";
 import { Container, Row, Button, Form } from "react-bootstrap";
 import { Alert } from "../components/Alert";
 
@@ -20,11 +21,16 @@ const CreateCourse = () => {
       price: event.target.price.value,
     };
 
-    createCourse(courseCreationData).then((response) => {
-      if (response.status === 200) {
-        Alert("success", `Course ${event.target.courseName.value} created`, "");
-      }
-    });
+    try {
+      await createCourse(courseCreationData);
+      Alert("success", `Course ${event.target.courseName.value} created`, "");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Opps... Something went wrong",
+        text: "Try again later",
+      });
+    }
   }
 
   return (

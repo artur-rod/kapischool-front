@@ -1,12 +1,13 @@
 import React from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
+import { refund } from "../services/payment/payment";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button } from "react-bootstrap";
+import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import { Alert } from "../components/Alert";
-import { refund } from "../services/payment/payment";
 
 const Profile = () => {
   const cookies = new Cookies();
@@ -21,18 +22,20 @@ const Profile = () => {
 
   const paymentId = cookies.get("paymentId");
 
-  function cancelPayment() {
+  async function cancelPayment() {
     const refundData = [{ amount: 50 }, { paymentId: paymentId }];
 
-    refund(refundData).then((response) => {
-      if (response.status === 200) {
-        Alert("success", "Subscription canceled", "...");
-      }
-
-      setTimeout(() => {
-        cookies.remove("paymentId");
-      }, 2000);
-    });
+    try {
+      await refund(refundData);
+      Alert("success", "Subscription canceled", "...");
+      cookies.remove("paymentId");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Opps... Something went wrong",
+        text: "Try again later",
+      });
+    }
   }
 
   return (

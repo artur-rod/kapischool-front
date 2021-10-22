@@ -11,6 +11,7 @@ import Header from "../components/Header";
 import SweetAlert from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Form } from "react-bootstrap";
+import { mailer } from "../services";
 
 function Register() {
   const history = useHistory();
@@ -34,33 +35,28 @@ function Register() {
       password: event.target.password.value,
     };
 
-    adminRegistration(registrationData)
-      .then((response) => {
-        if (response.status === 200) {
-          SweetAlert.fire({
-            type: "success",
-            title: "Registration Success!",
-            text: "You can now access out platform...",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-        }
-      })
-      .then(() => {
-        adminLogin(loginData).then((response) => {
-          if (response.status === 200) {
-            const JWT = response.data.token;
-            const email = response.data.user.email;
-            cookies.set("token", JWT, {
-              path: "/",
-            });
-            cookies.set("email", email, {
-              path: "/",
-            });
-            history.push("/dashboard");
-          }
-        });
+    try {
+      await adminRegistration(registrationData);
+      await mailer.registration([{ email: registrationData.email }]);
+
+      const login = await adminLogin(loginData);
+
+      const JWT = login.data.token;
+      const email = login.data.user.email;
+      cookies.set("token", JWT, {
+        path: "/",
       });
+      cookies.set("email", email, {
+        path: "/",
+      });
+      history.push("/dashboard");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Registration Failed",
+        text: `${err.response.data.error} : ${err.response.data.error} ? "Try again later"`,
+      });
+    }
   }
 
   return (

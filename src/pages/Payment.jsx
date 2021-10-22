@@ -1,8 +1,10 @@
 import React from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
+
 import Header from "../components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SweetAlert from "sweetalert2";
 import { Container, Row, Button, Form } from "react-bootstrap";
 import { Alert } from "../components/Alert";
 
@@ -59,40 +61,48 @@ const Payment = () => {
       },
     };
 
-    payment(paymentData).then((response) => {
-      if (response.status === 200) {
-        mailer.purchase([{ email: email }]);
-        profile.coursesUpdate({
-          email: email,
-          paymentId: response.data.id,
-        });
+    try {
+      const createPayment = await payment(paymentData);
 
-        cookies.set("paymentId", response.data.id, {
-          path: "/login",
-        });
-        cookies.remove("address");
-        cookies.remove("chargeId");
+      mailer.purchase([{ email: email }]);
+      profile.coursesUpdate({
+        email: email,
+        paymentId: createPayment.data.id,
+      });
 
-        Alert(
-          "success",
-          "Purchase Success!",
-          "You can access our platform now..."
-        );
-        setTimeout(() => {
-          history.push("/login/profile");
-        }, 2000);
-      }
-    });
+      cookies.set("paymentId", createPayment.data.id, {
+        path: "/login",
+      });
+      cookies.remove("address");
+      cookies.remove("chargeId");
+
+      Alert(
+        "success",
+        "Purchase Success!",
+        "You can access our platform now..."
+      );
+      setTimeout(() => {
+        history.push("/login/profile");
+      }, 2000);
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Opps... Something went wrong",
+        text: "Try again later",
+      });
+    }
   }
 
   const chargeId = cookies.get("chargeId");
-  function cancelButton() {
+  async function cancelButton() {
     const cancelationData = {
       chargeId: chargeId,
     };
 
-    cancelCharge(cancelationData).then((response) => {
-      if (response.status === 204) {
+    try {
+      const cancelation = await cancelCharge(cancelationData);
+
+      if (cancelation.status === 204) {
         Alert(
           "success",
           "Purchase Canceled!",
@@ -100,10 +110,15 @@ const Payment = () => {
         );
         setTimeout(() => {
           history.push("/courses");
-          window.location.reload(true);
         }, 2000);
       }
-    });
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Opps... Something went wrong",
+        text: "Try again later",
+      });
+    }
   }
 
   return (

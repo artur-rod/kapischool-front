@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Card, Button, Col, Row } from "react-bootstrap";
 import Header from "../components/Header";
+import SweetAlert from "sweetalert2";
 import { Alert } from "../components/Alert";
 
 const Courses = () => {
@@ -31,8 +32,18 @@ const Courses = () => {
 
   const [courses, setCourses] = useState([]);
   async function listCourses() {
-    const { data } = await listAll();
-    setCourses(data);
+    if (confirmCookies) {
+      try {
+        const { data } = await listAll();
+        setCourses(data);
+      } catch (err) {
+        SweetAlert.fire({
+          type: "error",
+          title: "Opps... Something went wrong",
+          text: "Try again later",
+        });
+      }
+    }
   }
   useEffect(() => {
     listCourses();

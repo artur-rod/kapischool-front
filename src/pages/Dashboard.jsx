@@ -24,13 +24,22 @@ export default function Balance() {
 
   const [balance, setBalance] = useState([]);
   async function showBalance() {
-    const { data } = await listAll();
-    setBalance(data);
+    try {
+      const { data } = await listAll();
+      setBalance(data);
+    } catch (err) {
+      Alert("error", "Opps... Something went wrong", "Try again later");
+    }
   }
+
   const [charges, setCharges] = useState([]);
   async function showCharges() {
-    const { data } = await listCharges();
-    setCharges(data);
+    try {
+      const { data } = await listCharges();
+      setCharges(data);
+    } catch (err) {
+      Alert("error", "Opps... Something went wrong", "Try again later");
+    }
   }
 
   return (

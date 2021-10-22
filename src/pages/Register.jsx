@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Header from "../components/Header";
@@ -34,36 +34,36 @@ function Register() {
       password: event.target.password.value,
     };
 
-    console.log([{ email: registrationData.email }]);
+    try {
+      await userRegistration(registrationData);
+      await mailer.registration([{ email: registrationData.email }]);
 
-    userRegistration(registrationData)
-      .then((response) => {
-        if (response.status === 200) {
-          mailer.registration([{ email: registrationData.email }]);
-          SweetAlert.fire({
-            type: "success",
-            title: "Registration Success!",
-            text: "You can now access out platform...",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-        }
-      })
-      .then(() => {
-        userLogin(loginData).then((response) => {
-          if (response.status === 200) {
-            const JWT = response.data.token;
-            const email = response.data.user.email;
-            cookies.set("token", JWT, {
-              path: "/",
-            });
-            cookies.set("email", email, {
-              path: "/charges",
-            });
-            history.push("/login/profile");
-          }
-        });
+      SweetAlert.fire({
+        type: "success",
+        title: "Registration Success!",
+        text: "You can now access out platform...",
+        showConfirmButton: false,
+        timer: 2000,
       });
+
+      const login = await userLogin(loginData);
+
+      const JWT = login.data.token;
+      const email = login.data.user.email;
+      cookies.set("token", JWT, {
+        path: "/",
+      });
+      cookies.set("email", email, {
+        path: "/charges",
+      });
+      history.push("/");
+    } catch (err) {
+      SweetAlert.fire({
+        type: "error",
+        title: "Registration Failed",
+        text: `${err.response.data.error} : ${err.response.data.error} ? "Try again later"`,
+      });
+    }
   }
 
   return (
@@ -79,6 +79,7 @@ function Register() {
               name="name"
               type="text"
               placeholder="Enter your name"
+              required
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -87,6 +88,7 @@ function Register() {
               name="email"
               type="email"
               placeholder="Enter your e-mail"
+              required
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -94,6 +96,7 @@ function Register() {
               name="password"
               type="password"
               placeholder="Enter your Password"
+              required
             />
           </Form.Group>
 
@@ -109,6 +112,6 @@ function Register() {
       </Button>
     </Container>
   );
-};
+}
 
 export default Register;
