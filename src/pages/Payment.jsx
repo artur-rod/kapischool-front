@@ -17,8 +17,8 @@ const Payment = () => {
 
   const cookies = new Cookies();
 
-  const address = cookies.get("address");
   const email = cookies.get("email");
+  const courseId = cookies.get("courseId");
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -49,11 +49,13 @@ const Payment = () => {
       return hash;
     }
 
+    const address = await profile.show({ email: email });
+
     const paymentData = {
       chargeId: chargeId,
       billing: {
         email: email,
-        address: address,
+        address: address.data.address[0],
         delayed: false,
       },
       creditCardDetails: {
@@ -67,14 +69,15 @@ const Payment = () => {
       mailer.purchase([{ email: email }]);
       profile.coursesUpdate({
         email: email,
-        paymentId: createPayment.data.id,
-      });
-
-      cookies.set("paymentId", createPayment.data.id, {
-        path: "/login",
+        course: {
+          details: courseId,
+          paymentId: createPayment.data.id,
+        },
       });
       cookies.remove("address");
       cookies.remove("chargeId");
+      cookies.remove("courseId");
+      cookies.remove("coursePrice");
 
       Alert(
         "success",
@@ -83,6 +86,7 @@ const Payment = () => {
       );
       setTimeout(() => {
         history.push("/login/profile");
+        window.location.reload();
       }, 2000);
     } catch (err) {
       SweetAlert.fire({

@@ -38,10 +38,13 @@ const Payment = () => {
   async function onSubmit(event) {
     event.preventDefault();
 
+    const price = await cookies.get("coursePrice");
+    const courseId = await cookies.get("courseId");
+
     const payloadData = {
       charge: {
-        description: "Curso 1",
-        amount: 50,
+        description: `Curso ID: ${courseId}`,
+        amount: price,
         installments: 1,
         paymentTypes: ["CREDIT_CARD"],
       },
@@ -68,12 +71,6 @@ const Payment = () => {
       const charge = await createCharge(payloadData);
 
       cookies.set("chargeId", charge.data.id, {
-        path: "/charges",
-      });
-      cookies.set("email", payloadData.billing.email, {
-        path: "/charges",
-      });
-      cookies.set("address", payloadData.billing.address, {
         path: "/charges",
       });
       await profile.addressUpdate(profileData);

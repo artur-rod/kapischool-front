@@ -54,14 +54,14 @@ function Register() {
         path: "/",
       });
       cookies.set("email", email, {
-        path: "/charges",
+        path: "/",
       });
       history.push("/");
     } catch (err) {
       SweetAlert.fire({
         type: "error",
         title: "Registration Failed",
-        text: `${err.response.data.error} : ${err.response.data.error} ? "Try again later"`,
+        text: err.response.data.error,
       });
     }
   }

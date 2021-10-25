@@ -25,11 +25,6 @@ const Courses = () => {
     history.push("/");
   }
 
-  function goToCharges() {
-    history.push("/charges");
-    window.location.reload();
-  }
-
   const [courses, setCourses] = useState([]);
   async function listCourses() {
     if (confirmCookies) {
@@ -49,6 +44,19 @@ const Courses = () => {
     listCourses();
   }, []);
 
+  function goToCharges(event) {
+    const courseId = event.target.getAttribute("data-id");
+    const coursePrice = event.target.getAttribute("data-price");
+    cookies.set("courseId", courseId, {
+      path: "/",
+    });
+    cookies.set("coursePrice", coursePrice, {
+      path: "/",
+    });
+    history.push("/charges");
+    window.location.reload();
+  }
+
   return (
     <Container>
       <Header />
@@ -59,7 +67,13 @@ const Courses = () => {
       <Row>
         {courses.map((course) => (
           <Col md>
-            <Card key={course._id}>
+            <Card
+              key={course.name}
+              style={{
+                minHeight: "270px",
+                minWidth: "250px",
+              }}
+            >
               <Card.Body>
                 <Card.Title>{course.name}</Card.Title>
                 <Card.Text>
@@ -74,7 +88,12 @@ const Courses = () => {
                   <br />
                   <p>{course.price}</p>
                 </Card.Text>
-                <Button onClick={goToCharges} variant="success">
+                <Button
+                  onClick={goToCharges}
+                  data-id={course._id}
+                  data-price={course.price}
+                  variant="success"
+                >
                   Purchase
                 </Button>
               </Card.Body>

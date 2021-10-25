@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use((config) => {
   let token = document.cookie.split("=")[1];
 
   if (/;/i.test(token)) {
-    token = document.cookie.split("token=")[1];
+    token = document.cookie.split("token=")[1].split(";")[0];
   }
 
   if (token) {

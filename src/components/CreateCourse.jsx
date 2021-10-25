@@ -19,6 +19,7 @@ const CreateCourse = () => {
       ],
       description: event.target.description.value,
       price: event.target.price.value,
+      link: event.target.link.value,
     };
 
     try {
@@ -66,6 +67,7 @@ const CreateCourse = () => {
               placeholder="Price"
               required
             />
+            <Form.Control name="link" type="text" placeholder="link" required />
           </Form.Group>
 
           <Button variant="primary" type="submit">

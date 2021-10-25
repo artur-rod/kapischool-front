@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Nav } from "react-bootstrap";
 import Logout from "./Logout";
 
 const Header = () => {
+  const cookies = new Cookies();
+  const confirmCookies = cookies.get("token");
+
   return (
     <Nav>
       <Nav.Item>

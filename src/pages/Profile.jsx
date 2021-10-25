@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 import { refund } from "../services/payment/payment";
+import { profile } from "../services";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button } from "react-bootstrap";
@@ -10,25 +11,40 @@ import Header from "../components/Header";
 import { Alert } from "../components/Alert";
 
 const Profile = () => {
+  const history = useHistory();
+
   const cookies = new Cookies();
   const confirmCookies = cookies.get("token");
-
-  const history = useHistory();
 
   if (!confirmCookies) {
     Alert("warning", "Your're not logged", "Login to access our platform");
     setTimeout(() => history.push("/"), 2000);
   }
 
-  const paymentId = cookies.get("paymentId");
+  const email = cookies.get("email");
 
-  async function cancelPayment() {
-    const refundData = [{ amount: 50 }, { paymentId: paymentId }];
+  const [courses, setCourses] = useState([]);
+
+  async function showProfile() {
+    const userProfile = await profile.show({ email: email });
+    setCourses(userProfile.data.courses);
+  }
+  useEffect(() => {
+    showProfile();
+  }, []);
+
+  async function cancelPayment(event) {
+    const paymentId = event.target.getAttribute("data-id");
+    const amount = event.target.getAttribute("data-price");
+
+    const refundData = [{ amount: amount }, { paymentId: paymentId }];
+    const courseDeletionData = { email: email, paymentId: paymentId };
 
     try {
       await refund(refundData);
+      await profile.deleteCourse(courseDeletionData);
       Alert("success", "Subscription canceled", "...");
-      cookies.remove("paymentId");
+      window.location.reload();
     } catch (err) {
       SweetAlert.fire({
         type: "error",
@@ -38,18 +54,40 @@ const Profile = () => {
     }
   }
 
+  async function accessCourse(event) {
+    const link = event.target.getAttribute("data-link");
+
+    window.open(link, "_blank");
+  }
+
   return (
     <Container>
       <Header />
       <h1>Profile</h1>
 
       <h2>My courses</h2>
-      <p>
-        Courses <br />
-        {paymentId}
-      </p>
-
-      <Button onClick={cancelPayment}>Cancelar assinatura</Button>
+      <div>
+        <h3>Courses</h3> <br />
+        {courses.map((course) => (
+          <>
+            <h4 id={course}>{course.details.name}</h4>
+            <Button
+              onClick={cancelPayment}
+              data-id={course.paymentId}
+              data-price={course.details.price}
+              variant="outline-danger"
+              style={{ marginRight: "10px" }}
+            >
+              Cancel Subscription
+            </Button>
+            <Button onClick={accessCourse} data-link={course.details.link}>
+              Access course
+            </Button>
+            <br />
+            <br />
+          </>
+        ))}
+      </div>
     </Container>
   );
 };

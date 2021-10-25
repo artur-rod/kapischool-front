@@ -32,7 +32,11 @@ function Login() {
     try {
       const login = await userLogin(loginData);
       const JWT = login.data.token;
+      const email = event.target.email.value;
       cookies.set("token", JWT, {
+        path: "/",
+      });
+      cookies.set("email", email, {
         path: "/",
       });
       history.push("/");

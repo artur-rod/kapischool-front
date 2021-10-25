@@ -7,12 +7,13 @@ import { useHistory } from "react-router-dom";
 
 const Logout = () => {
   const history = useHistory();
+  const cookies = new Cookies();
 
   function logout() {
-    const cookies = new Cookies();
     cookies.remove("token");
     history.push("/");
   }
+
   return (
     <Button
       onClick={logout}
