@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 
@@ -7,8 +7,12 @@ import { Nav } from "react-bootstrap";
 import Logout from "./Logout";
 
 const Header = () => {
-  const cookies = new Cookies();
-  const confirmCookies = cookies.get("token");
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const cookies = new Cookies();
+    setToken(cookies.get("token"));
+  }, []);
 
   return (
     <Nav>
@@ -27,9 +31,16 @@ const Header = () => {
           Register
         </Link>
       </Nav.Item>
-      <Nav.Item>
-        <Link to="/login">Login</Link>
-      </Nav.Item>
+      {!token && (
+        <Nav.Item>
+          <Link to="/login">Login</Link>
+        </Nav.Item>
+      )}
+      {!!token && (
+        <Nav.Item>
+          <Link to="/login/profile">Profile</Link>
+        </Nav.Item>
+      )}
 
       <div
         className="container"

@@ -1,26 +1,36 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Cookies from "universal-cookie";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Logout = () => {
   const history = useHistory();
-  const cookies = new Cookies();
+  const location = useLocation();
+  const cookies = useMemo(() => new Cookies(), []);
+
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(cookies.get("token"));
+  }, [cookies]);
 
   function logout() {
     cookies.remove("token");
     history.push("/");
+    history.go(0);
   }
 
   return (
-    <Button
-      onClick={logout}
-      style={{ position: "absolute", left: "1rem", bottom: "1rem" }}
-    >
-      Logout
-    </Button>
+    !!token && (
+      <Button
+        onClick={logout}
+        style={{ position: "absolute", left: "1rem", bottom: "1rem" }}
+      >
+        Logout
+      </Button>
+    )
   );
 };
 
