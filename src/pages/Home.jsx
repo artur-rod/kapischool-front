@@ -8,17 +8,29 @@ import Cookies from "universal-cookie";
 
 function Home() {
   const cookies = new Cookies();
-  const confirmCookies = cookies.get("token");
 
   useEffect(() => {
+    const confirmCookies = cookies.get("okayWithCookies");
     if (!confirmCookies) {
       SweetAlert.fire({
         type: "info",
-        title: "This website use Cookies",
-        text: "You're okay with that?",
+        title: "This website use Cookies! You're okay with that?",
+        showCancelButton: true,
+        cancelButtonText: "No",
+        cancelButtonColor: "#d33",
+
+        toast: true,
+        width: "100vw",
+        position: "bottom",
+      }).then((result) => {
+        if (result.value === true) {
+          cookies.set("okayWithCookies", "Okay", {
+            path: "/",
+          });
+        }
       });
     }
-  }, []);
+  });
 
   return (
     <Container>
