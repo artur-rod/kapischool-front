@@ -11,7 +11,7 @@ async function createCharge(body) {
 }
 
 async function cancelCharge(body) {
-  const cancelation = await api.put("/charges/cancelation", body);
+  const cancelation = await api.put("/charges/", body);
   return cancelation;
 }
 
