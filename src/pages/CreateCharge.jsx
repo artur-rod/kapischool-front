@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { createCharge } from "../services/payment/charge";
 import { profile, CEP } from "../services";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 

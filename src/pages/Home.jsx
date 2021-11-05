@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import Cookies from "universal-cookie";

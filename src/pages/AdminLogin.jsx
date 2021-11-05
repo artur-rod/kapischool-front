@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { adminLogin } from "../services/auth/registration-and-login";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 

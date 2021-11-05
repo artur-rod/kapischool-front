@@ -6,6 +6,7 @@ import { listAll } from "../services/payment/balance";
 import { listCharges } from "../services/payment/charge";
 import CreateCourse from "../components/CreateCourse";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Alert } from "../components/Alert";
 import Header from "../components/Header";
 import Register from "./AdminRegister";

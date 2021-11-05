@@ -3,6 +3,7 @@ import { useHistory, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 import Header from "../components/Header";
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 
 import {

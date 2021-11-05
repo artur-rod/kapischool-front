@@ -6,6 +6,7 @@ import {
 } from "../services/auth/registration-and-login";
 import Cookies from "universal-cookie";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 import { mailer } from "../services";
 

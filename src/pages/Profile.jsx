@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { refund } from "../services/payment/payment";
 import { profile } from "../services";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import { Alert } from "../components/Alert";

@@ -3,6 +3,7 @@ import { listAll } from "../services/courses";
 
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import Header from "../components/Header";
 import SweetAlert from "sweetalert2";
