@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container } from "react-bootstrap";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import Cookies from "universal-cookie";
@@ -33,10 +31,16 @@ function Home() {
   });
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Home</h1>
-    </Container>
+      <div className="container-fluid mt-4 text-center">
+        <h1>KapiSchool</h1>
+        <h3>
+          <span>Your way to learn </span>
+          <span className="bg-primary text-light">Web Programming</span>
+        </h3>
+      </div>
+    </>
   );
 }
 

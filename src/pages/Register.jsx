@@ -1,10 +1,9 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
+
 import Header from "../components/Header";
 import SweetAlert from "sweetalert2";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button, Form } from "react-bootstrap";
 
 import {
   userLogin,
@@ -14,9 +13,6 @@ import { mailer } from "../services";
 
 function Register() {
   const history = useHistory();
-  function goToHome() {
-    history.push("/");
-  }
 
   const cookies = new Cookies();
 
@@ -67,50 +63,66 @@ function Register() {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Registration</h1>
-
-      <form onSubmit={onSubmit}>
-        <Row style={{ maxWidth: "300px" }}>
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Your Name</Form.Label>
-            <Form.Control
-              name="name"
-              type="text"
-              placeholder="Enter your name"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Your E-mail</Form.Label>
-            <Form.Control
-              name="email"
-              type="email"
-              placeholder="Enter your e-mail"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              name="password"
-              type="password"
-              placeholder="Enter your Password"
-              required
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Register
-          </Button>
-        </Row>
-      </form>
-
-      <br />
-      <Button onClick={goToHome} variant="outline-secondary">
-        Back
-      </Button>
-    </Container>
+      <div className="container-fluid mt-4 d-flex flex-column align-items-center">
+        <h2 className="text-center">Create your account</h2>
+        <div className="w-25">
+          <form onSubmit={onSubmit}>
+            <div className="form-group mb-2">
+              <label for="name">Enter your name</label>
+              <input
+                type="name"
+                className="form-control"
+                id="name"
+                aria-describedby="nameHelp"
+                placeholder="Enter name"
+                required
+              />
+            </div>
+            <div className="form-group mb-2">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                required
+              />
+            </div>
+            <div className="form-group mb-2">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="terms"
+                required
+              />
+              <label className="form-check-label" for="terms">
+                <span style={{ fontSize: ".95rem" }}>
+                  I agree with <Link to="/">Terms of Use</Link>
+                  <span> and </span>
+                  <Link to="/">Privacy Policy</Link>
+                </span>
+              </label>
+            </div>
+            <button type="submit" className="btn btn-primary custom">
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
 

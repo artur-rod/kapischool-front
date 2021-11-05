@@ -4,11 +4,8 @@ import { listAll } from "../services/courses";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Card, Button, Col, Row } from "react-bootstrap";
 import Header from "../components/Header";
 import SweetAlert from "sweetalert2";
-import { Alert } from "../components/Alert";
 
 const Courses = () => {
   const cookies = new Cookies();
@@ -17,12 +14,12 @@ const Courses = () => {
   const history = useHistory();
 
   if (!confirmCookies) {
-    Alert("warning", "Your're not logged", "Login to access our platform");
+    SweetAlert.fire({
+      type: "warning",
+      title: "Your're not logged",
+      text: "Login to access our platform",
+    });
     setTimeout(() => history.push("/"), 2000);
-  }
-
-  function goToHome() {
-    history.push("/");
   }
 
   const [courses, setCourses] = useState([]);
@@ -58,54 +55,51 @@ const Courses = () => {
   }
 
   return (
-    <Container>
+    <>
       <Header />
+      <div className="container-fluid mt-4 d-flex flex-column align-items-center">
+        <h2 className="text-center mb-4">Choose your course...</h2>
 
-      <h1>Courses</h1>
-      <h2>Choose your course...</h2>
-
-      <Row>
-        {courses.map((course) => (
-          <Col md>
-            <Card
-              key={course.name}
-              style={{
-                minHeight: "270px",
-                minWidth: "250px",
-              }}
-            >
-              <Card.Body>
-                <Card.Title>{course.name}</Card.Title>
-                <Card.Text>
-                  {course.description}
+        <div className="d-flex w-75">
+          {courses.map((course) => (
+            <div class="card w-50 mx-3">
+              <div
+                class="card-body d-flex flex-column justify-content-evenly"
+                id={course.name}
+                style={{
+                  minHeight: "270px",
+                  minWidth: "250px",
+                }}
+              >
+                <h5 className="sticky-top">{course.name}</h5>
+                <div>
+                  <p>{course.description}</p>
                   {course.keywords.map((word) => (
-                    <>
-                      {" "}
-                      <br />
-                      <span>✔{word} </span>{" "}
-                    </>
+                    <li
+                      style={{
+                        listStyleType: "none",
+                      }}
+                    >
+                      <span>✔ {word}</span>
+                    </li>
                   ))}
                   <br />
-                  <p>{course.price}</p>
-                </Card.Text>
-                <Button
+                  <h6>R$ {course.price}</h6>
+                </div>
+                <button
+                  className="bottom btn btn-success"
                   onClick={goToCharges}
                   data-id={course._id}
                   data-price={course.price}
-                  variant="success"
                 >
                   Purchase
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-      <br />
-      <Button onClick={goToHome} variant="outline-secondary">
-        Voltar
-      </Button>
-    </Container>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

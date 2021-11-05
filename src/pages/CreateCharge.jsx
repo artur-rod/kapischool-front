@@ -1,14 +1,11 @@
 import React from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
+import { createCharge } from "../services/payment/charge";
+import { profile, CEP } from "../services";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button, Form } from "react-bootstrap";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
-import { createCharge } from "../services/payment/charge";
-
-import { profile, CEP } from "../services";
 
 const Payment = () => {
   const history = useHistory();
@@ -86,89 +83,101 @@ const Payment = () => {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Payment</h1>
-      <h2>Personal Data</h2>
-
-      <form onSubmit={onSubmit}>
-        <Row style={{ maxWidth: "500px" }}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Personal Information</Form.Label>
-            <Form.Control
-              name="name"
-              type="text"
-              placeholder="Enter your name"
-              required
-            />
-            <Form.Control
-              name="email"
-              type="email"
-              placeholder="Confirm your e-mail"
-              required
-            />
-            <Form.Control
-              name="document"
-              type="number"
-              placeholder="Enter your CPF"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Address</Form.Label>
-            <Row>
-              <Form.Control
-                name="postCode"
-                type="number"
-                placeholder="PostCode"
-                className="address"
-                required
-              />
-              <Button variant="primary" onClick={searchCEP}>
-                Search
-              </Button>
-            </Row>
+      <div className="container-fluid mt-4 d-flex flex-column align-items-center">
+        <h2>Payment</h2>
+        <div className="w-75 container">
+          <form onSubmit={onSubmit}>
+            <div className="row">
+              <div className="form-group mb-4 col">
+                <h6 className="mb-3">Personal Information</h6>
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  className="form-control mb-1"
+                  required
+                />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Confirm your e-mail"
+                  className="form-control mb-1"
+                  required
+                />
+                <input
+                  name="document"
+                  type="number"
+                  placeholder="Enter your CPF"
+                  className="form-control"
+                  required
+                />
+              </div>
+              <div className="col">
+                <h6 className="mb-3">Address</h6>
+                <div className="d-flex mb-1">
+                  <input
+                    name="postCode"
+                    type="number"
+                    placeholder="Post Code"
+                    className="me-1 form-control address"
+                    required
+                  />
+                  <button className="btn btn-primary" onClick={searchCEP}>
+                    Search
+                  </button>
+                </div>
+                <input
+                  name="street"
+                  type="text"
+                  placeholder="Street"
+                  className="form-control address mb-1"
+                  required
+                />
+                <input
+                  name="number"
+                  type="text"
+                  placeholder="Number"
+                  className="form-control mb-1"
+                  required
+                />
+                <input
+                  name="city"
+                  type="text"
+                  placeholder="City"
+                  className="form-control address mb-1"
+                  required
+                />
+                <input
+                  name="state"
+                  type="text"
+                  placeholder="State"
+                  className="form-control address"
+                  required
+                />
+              </div>
+            </div>
             <br />
-            <Form.Control
-              name="street"
-              type="text"
-              placeholder="Street"
-              className="address"
-              required
-            />
-            <Form.Control
-              name="number"
-              type="text"
-              placeholder="Number"
-              required
-            />
-            <Form.Control
-              name="city"
-              type="text"
-              placeholder="City"
-              className="address"
-              required
-            />
-            <Form.Control
-              name="state"
-              type="text"
-              placeholder="State"
-              className="address"
-              required
-            />
-          </Form.Group>
+            <div className="row">
+              <div className="col"></div>
+              <button
+                onClick={goToCourses}
+                className="btn btn-outline-danger w-25 me-4"
+              >
+                Cancel Purchase
+              </button>
+              <button className="btn btn-primary w-25" type="submit">
+                Continue Purchace
+              </button>
+              <div className="col"></div>
+            </div>
+          </form>
+        </div>
 
-          <Button variant="primary" type="submit">
-            Continue
-          </Button>
-        </Row>
-      </form>
-
-      <br />
-      <Button onClick={goToCourses} variant="outline-danger">
-        Cancel Purchase
-      </Button>
-    </Container>
+        <br />
+      </div>
+    </>
   );
 };
 

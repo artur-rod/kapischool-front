@@ -3,9 +3,7 @@ import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 
 import Header from "../components/Header";
-import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from "sweetalert2";
-import { Container, Row, Button, Form } from "react-bootstrap";
 import { Alert } from "../components/Alert";
 
 import { payment } from "../services/payment/payment";
@@ -24,11 +22,11 @@ const Payment = () => {
     event.preventDefault();
 
     const cardData = {
-      cardNumber: "5162499546921104",
-      holderName: "Fulano da Silva",
-      securityCode: "702",
-      expirationMonth: "04",
-      expirationYear: "2023",
+      cardNumber: event.target.cardNumber.value,
+      holderName: event.target.holderName.value,
+      securityCode: event.target.securityCode.value,
+      expirationMonth: event.target.expirationMonth.value,
+      expirationYear: event.target.expirationYear.value,
     };
 
     const publicToken = process.env.REACT_APP_PUBLIC_TOKEN;
@@ -126,54 +124,72 @@ const Payment = () => {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Payment</h1>
-      <h2>Payment Data</h2>
+      <div className="container-fluid mt-4 d-flex flex-column align-items-center">
+        <h2 className="text-center">Payment</h2>
+        <div className="w-25">
+          <form onSubmit={onSubmit}>
+            <div className="form-group mb-2">
+              <h6>Credit Card Data</h6>
 
-      <form onSubmit={onSubmit}>
-        <Row style={{ maxWidth: "500px" }}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Credit Card Data</Form.Label>
-
-            <Form.Control
-              name="cardNumber"
-              type="number"
-              placeholder="Card Number"
-            />
-            <Form.Control
-              name="holderName"
-              type="number"
-              placeholder="Holder Name"
-            />
-            <Form.Control
-              name="securityCode"
-              type="number"
-              placeholder="Security Code"
-            />
-            <Form.Control
-              name="expirationMonth"
-              type="number"
-              placeholder="Expiration Month"
-            />
-            <Form.Control
-              name="expirationYear"
-              type="number"
-              placeholder="Expiration Year"
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Finish Purchase
-          </Button>
-        </Row>
-      </form>
-
-      <br />
-      <Button onClick={cancelButton} variant="outline-danger">
-        Cancel Purchase
-      </Button>
-    </Container>
+              <input
+                name="cardNumber"
+                type="number"
+                className="cardData form-control mb-1"
+                placeholder="Card Number"
+                required
+              />
+              <input
+                name="holderName"
+                type="text"
+                className="cardData form-control mb-1"
+                placeholder="Holder Name"
+                required
+              />
+              <input
+                name="securityCode"
+                type="number"
+                className="cardData form-control mb-1"
+                placeholder="Security Code"
+                min="000"
+                max="999"
+                required
+              />
+              <input
+                name="expirationMonth"
+                type="number"
+                className="cardData form-control mb-1"
+                placeholder="Expiration Month"
+                min="01"
+                max="12"
+                required
+              />
+              <input
+                name="expirationYear"
+                type="number"
+                className="cardData form-control mb-3"
+                placeholder="Expiration Year"
+                min="2020"
+                max="2100"
+                required
+              />
+              <div className="d-flex justify-content-center">
+                <button
+                  onClick={cancelButton}
+                  className="btn btn-outline-danger me-2"
+                >
+                  Cancel Purchase
+                </button>
+                <button className="btn btn-primary ms-2" type="submit">
+                  Finish Purchase
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 

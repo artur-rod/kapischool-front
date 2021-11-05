@@ -4,8 +4,6 @@ import { useHistory } from "react-router-dom";
 import { refund } from "../services/payment/payment";
 import { profile } from "../services";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Button } from "react-bootstrap";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 import { Alert } from "../components/Alert";
@@ -24,10 +22,14 @@ const Profile = () => {
   const email = cookies.get("email");
 
   const [courses, setCourses] = useState([]);
+  const [address, setAddress] = useState([]);
+  const [myProfile, setMyProfile] = useState(null);
 
   async function showProfile() {
     const userProfile = await profile.show({ email: email });
     setCourses(userProfile.data.courses);
+    setMyProfile(userProfile.data.user);
+    setAddress(userProfile.data.address[0]);
   }
   useEffect(() => {
     showProfile();
@@ -61,34 +63,71 @@ const Profile = () => {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Profile</h1>
-
-      <h2>My courses</h2>
-      <div>
-        <h3>Courses</h3> <br />
-        {courses.map((course) => (
+      <div className="container-fluid mt-4 w-75">
+        {!!myProfile && (
           <>
-            <h4 id={course}>{course.details.name}</h4>
-            <Button
-              onClick={cancelPayment}
-              data-id={course.paymentId}
-              data-price={course.details.price}
-              variant="outline-danger"
-              style={{ marginRight: "10px" }}
-            >
-              Cancel Subscription
-            </Button>
-            <Button onClick={accessCourse} data-link={course.details.link}>
-              Access course
-            </Button>
-            <br />
-            <br />
+            <h2>{myProfile.name}</h2>
+            <div className="container">
+              <div className="row">
+                <div className="col mt-4 me-4 p-3 container shadow rounded-3">
+                  <h3>My Courses</h3>
+                  <div className="mt-3 ps-4">
+                    {courses.map((course) => (
+                      <>
+                        <h5 id={course}>{course.details.name}</h5>
+                        <button
+                          onClick={cancelPayment}
+                          data-id={course.paymentId}
+                          data-price={course.details.price}
+                          className="btn btn-outline-danger"
+                          style={{ marginRight: "10px" }}
+                        >
+                          Cancel Subscription
+                        </button>
+                        <button
+                          onClick={accessCourse}
+                          data-link={course.details.link}
+                          className="btn btn-primary"
+                        >
+                          Access course
+                        </button>
+                        <br />
+                        <br />
+                      </>
+                    ))}
+                  </div>
+                </div>
+                <div className="col mt-4 ms-4 p-3 container shadow rounded-3 ">
+                  <h3>My Profile</h3>
+                  <div className="mt-3 ps-4">
+                    <h5>Email:</h5>
+                    <p className="ps-4">{myProfile.email}</p>
+                    <h5>Address:</h5>
+                    <p className="ps-4 m-0">
+                      <b>City:</b> {address.city}
+                    </p>
+                    <p className="ps-4 m-0">
+                      <b>Number:</b> {address.number}
+                    </p>
+                    <p className="ps-4 m-0">
+                      <b>Post Code:</b> {address.postCode}
+                    </p>
+                    <p className="ps-4 m-0">
+                      <b>State:</b> {address.state}
+                    </p>
+                    <p className="ps-4 m-0">
+                      <b>Street:</b> {address.street}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </>
-        ))}
+        )}
       </div>
-    </Container>
+    </>
   );
 };
 

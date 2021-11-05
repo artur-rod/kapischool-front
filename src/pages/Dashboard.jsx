@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 
@@ -6,10 +6,9 @@ import { listAll } from "../services/payment/balance";
 import { listCharges } from "../services/payment/charge";
 import CreateCourse from "../components/CreateCourse";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Button } from "react-bootstrap";
 import { Alert } from "../components/Alert";
 import Header from "../components/Header";
+import Register from "./AdminRegister";
 
 export default function Balance() {
   const cookies = new Cookies();
@@ -31,6 +30,9 @@ export default function Balance() {
       Alert("error", "Opps... Something went wrong", "Try again later");
     }
   }
+  useEffect(() => {
+    showBalance();
+  }, []);
 
   const [charges, setCharges] = useState([]);
   async function showCharges() {
@@ -41,36 +43,75 @@ export default function Balance() {
       Alert("error", "Opps... Something went wrong", "Try again later");
     }
   }
+  useEffect(() => {
+    showCharges();
+  }, []);
+
+  const [registerPage, setRegisterPage] = useState(false);
+  function employeeRegister() {
+    setRegisterPage(true);
+  }
 
   return (
-    <Container>
+    <div>
       <Header />
-      <h1>KapiSchool Dashboard</h1>
+      <div className="container-fluid mt-4 w-75">
+        <div className="d-flex justify-content-between">
+          <h2>Dashboard</h2>
+          <button
+            className="btn btn-outline-primary"
+            onClick={employeeRegister}
+          >
+            Employee registration
+          </button>
+        </div>
+        {!!registerPage && (
+          <div className="d-flex container justify-content-center">
+            <div className="mt-4 me-3 p-4 shadow rounded-3 d-flex flex-column align-items-center">
+              <h3>Employee Registration</h3>
+              <Register />
+            </div>
+          </div>
+        )}
 
-      <div className="saldo">
-        <h2>Your balance</h2>
-        <Button onClick={showBalance}>Show Balance</Button>
-
-        <p>Em conta: R$ {balance.transferableBalance}</p>
-        <p>A receber: R$ {balance.withheldBalance}</p>
+        {!registerPage && (
+          <div className="container-lg">
+            <div className="row">
+              <div className="col mt-4 me-3 p-3 container shadow rounded-3">
+                <h3>Finances</h3>
+                <div className="ps-3">
+                  <h5>
+                    Your Balance -{" "}
+                    <span className="text-primary">
+                      R$ {balance.transferableBalance}
+                    </span>
+                  </h5>
+                </div>
+                <div className="listCharges ps-3 pt-2 m-50">
+                  <h5>Charges</h5>
+                  <div
+                    className="mh-75 overflow-auto bg-light rounded p-2"
+                    style={{ maxHeight: "39vh" }}
+                  >
+                    {charges.map((charge) => (
+                      <div>
+                        <b>Id:</b> {charge.id} <br />
+                        <b>Amount:</b> {charge.amount} <br />
+                        <b>Status:</b> {charge.status} <br />
+                        <b>Due date:</b> {charge.dueDate} <br />
+                        <hr />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="col mt-4 ms-3 p-3 container shadow rounded-3">
+                <CreateCourse />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className="listCharges">
-        <h2>List charges</h2>
-        <Button onClick={showCharges}>List</Button>
-
-        {charges.map((charge) => (
-          <li>
-            <b>Charge Id:</b> {charge.id} <br />
-            <b>Amount:</b> {charge.amount} <br />
-            <b>Status:</b> {charge.status} <br />
-            <b>Due date:</b> {charge.dueDate} <br />
-            <br />
-          </li>
-        ))}
-      </div>
-      <br />
-      <CreateCourse />
-    </Container>
+    </div>
   );
 }

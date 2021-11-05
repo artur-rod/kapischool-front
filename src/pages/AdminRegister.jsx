@@ -6,18 +6,11 @@ import {
 } from "../services/auth/registration-and-login";
 import Cookies from "universal-cookie";
 
-import Header from "../components/Header";
-
 import SweetAlert from "sweetalert2";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button, Form } from "react-bootstrap";
 import { mailer } from "../services";
 
 function Register() {
   const history = useHistory();
-  function goToHome() {
-    history.push("/");
-  }
   const cookies = new Cookies();
 
   async function onSubmit(event) {
@@ -60,47 +53,56 @@ function Register() {
   }
 
   return (
-    <Container>
-      <Header />
-      <h1>Registration</h1>
-
+    <div className="container-fluid p-3">
       <form onSubmit={onSubmit}>
-        <Row style={{ maxWidth: "300px" }}>
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Your Name</Form.Label>
-            <Form.Control
-              name="name"
-              type="text"
-              placeholder="Enter your name"
+        <div>
+          <h6>Enter employee data</h6>
+          <div className="form-group mb-2">
+            <input
+              type="name"
+              className="form-control"
+              id="name"
+              aria-describedby="nameHelp"
+              placeholder="Enter name"
+              required
             />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Your E-mail</Form.Label>
-            <Form.Control
-              name="email"
+          </div>
+          <div className="form-group mb-2">
+            <input
+              type="office"
+              className="form-control"
+              id="office"
+              aria-describedby="officeHelp"
+              placeholder="Enter office"
+              required
+            />
+          </div>
+          <div className="form-group mb-2">
+            <input
               type="email"
-              placeholder="Enter your e-mail"
+              className="form-control"
+              id="email"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+              required
             />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              name="password"
+          </div>
+          <div className="form-group mb-2">
+            <input
               type="password"
-              placeholder="Enter your Password"
+              className="form-control"
+              id="password"
+              placeholder="Password"
+              required
             />
-          </Form.Group>
+          </div>
 
-          <Button variant="primary" type="submit">
+          <button className="btn btn-primary custom" type="submit">
             Register
-          </Button>
-        </Row>
+          </button>
+        </div>
       </form>
-
-      <br />
-      <Button onClick={goToHome} variant="outline-secondary">
-        Back
-      </Button>
-    </Container>
+    </div>
   );
 }
 

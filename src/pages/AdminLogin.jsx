@@ -3,16 +3,11 @@ import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { adminLogin } from "../services/auth/registration-and-login";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button, Form } from "react-bootstrap";
 import SweetAlert from "sweetalert2";
 import Header from "../components/Header";
 
 function Login() {
   const history = useHistory();
-  function goToHome() {
-    history.push("/");
-  }
 
   const cookies = new Cookies();
 
@@ -53,39 +48,41 @@ function Login() {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <h1>Login</h1>
+      <div className="container-fluid mt-4 d-flex flex-column align-items-center">
+        <h2 className="text-center">Login into your account</h2>
+        <div className="w-25">
+          <form onSubmit={onSubmit}>
+            <div className="form-group mb-2">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                required
+              />
+            </div>
+            <div className="form-group mb-4">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="Password"
+                required
+              />
+            </div>
 
-      <form onSubmit={onSubmit}>
-        <Row style={{ maxWidth: "300px" }}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Your E-mail and Password</Form.Label>
-            <Form.Control
-              name="email"
-              type="email"
-              placeholder="Enter your e-mail"
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              name="password"
-              type="password"
-              placeholder="Enter your Password"
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Login
-          </Button>
-        </Row>
-      </form>
-
-      <br />
-      <Button onClick={goToHome} variant="outline-secondary">
-        Back
-      </Button>
-    </Container>
+            <button type="submit" className="btn btn-primary custom">
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
 
