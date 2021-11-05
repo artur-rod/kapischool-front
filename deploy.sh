@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd kapischool-front
+rm -r package-lock.json
 git pull
 
 sudo pm2 stop APP-Kapi
