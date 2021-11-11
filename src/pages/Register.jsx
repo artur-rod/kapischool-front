@@ -111,9 +111,9 @@ function Register() {
               />
               <label className="form-check-label" for="terms">
                 <span style={{ fontSize: ".95rem" }}>
-                  I agree with <Link to="/">Terms of Use</Link>
+                  I agree with <Link to="/terms-of-use">Terms of Use</Link>
                   <span> and </span>
-                  <Link to="/">Privacy Policy</Link>
+                  <Link to="/privacy-policy">Privacy Policy</Link>
                 </span>
               </label>
             </div>

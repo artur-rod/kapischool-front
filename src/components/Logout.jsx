@@ -14,6 +14,7 @@ const Logout = () => {
 
   function logout() {
     cookies.remove("token");
+    cookies.remove("admin");
     history.push("/");
     history.go(0);
   }

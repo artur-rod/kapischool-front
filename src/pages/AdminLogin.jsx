@@ -13,8 +13,9 @@ function Login() {
   const cookies = new Cookies();
 
   const confirmCookies = cookies.get("token");
+  const confirmAdminCookies = cookies.get("admin");
 
-  if (confirmCookies) {
+  if (confirmCookies && confirmAdminCookies) {
     history.push("/dashboard");
   }
 
@@ -30,12 +31,11 @@ function Login() {
       const login = await adminLogin(loginData);
 
       const JWT = login.data.token;
-      const email = login.data.admin.email;
       cookies.set("token", JWT, {
         path: "/",
       });
-      cookies.set("email", email, {
-        path: "/charges",
+      cookies.set("admin", "isAdmin", {
+        path: "/",
       });
 
       history.push("/dashboard");

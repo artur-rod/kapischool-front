@@ -40,6 +40,7 @@ const Courses = () => {
   }
   useEffect(() => {
     listCourses();
+    // eslint-disable-next-line
   }, []);
 
   function goToCharges(event) {

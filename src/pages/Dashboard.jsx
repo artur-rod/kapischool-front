@@ -12,13 +12,15 @@ import Header from "../components/Header";
 import Register from "./AdminRegister";
 
 export default function Balance() {
-  const cookies = new Cookies();
-  const confirmCookies = cookies.get("token");
-
   const history = useHistory();
 
-  if (!confirmCookies) {
-    Alert("warning", "Your're not logged", "Login to access our platform");
+  const cookies = new Cookies();
+  const confirmCookies = !cookies.get("token");
+  const confirmAdminCookies = !cookies.get("admin");
+  console.log(confirmAdminCookies === confirmCookies);
+
+  if (confirmAdminCookies !== confirmCookies) {
+    Alert("warning", "Your don't have access here", "...");
     setTimeout(() => history.push("/"), 2000);
   }
 

@@ -48,7 +48,7 @@ function Register() {
       SweetAlert.fire({
         type: "error",
         title: "Registration Failed",
-        text: `${err.response.data.error} : ${err.response.data.error} ? "Try again later"`,
+        text: "Try again later",
       });
     }
   }

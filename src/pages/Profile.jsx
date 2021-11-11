@@ -34,6 +34,7 @@ const Profile = () => {
   }
   useEffect(() => {
     showProfile();
+    // eslint-disable-next-line
   }, []);
 
   async function cancelPayment(event) {
