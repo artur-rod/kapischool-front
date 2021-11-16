@@ -9,7 +9,8 @@ import CreateCourse from "../components/CreateCourse";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Alert } from "../components/Alert";
 import Header from "../components/Header";
-import Register from "./AdminRegister";
+import Register from "../components/AdminRegister";
+import Analytics from "../components/Analytics";
 
 export default function Balance() {
   const history = useHistory();
@@ -53,6 +54,12 @@ export default function Balance() {
   const [registerPage, setRegisterPage] = useState(false);
   function employeeRegister() {
     setRegisterPage(true);
+    setAnalyticsPage(false);
+  }
+  const [analyticsPage, setAnalyticsPage] = useState(false);
+  function showAnalytics() {
+    setAnalyticsPage(true);
+    setRegisterPage(false);
   }
 
   return (
@@ -61,12 +68,17 @@ export default function Balance() {
       <div className="container-fluid mt-4 w-75">
         <div className="d-flex justify-content-between">
           <h2>Dashboard</h2>
-          <button
-            className="btn btn-outline-primary"
-            onClick={employeeRegister}
-          >
-            Employee registration
-          </button>
+          <div>
+            <button className="btn btn-outline-primary" onClick={showAnalytics}>
+              Analytics Data
+            </button>
+            <button
+              className="btn btn-outline-primary ms-2"
+              onClick={employeeRegister}
+            >
+              Employee registration
+            </button>
+          </div>
         </div>
         {!!registerPage && (
           <div className="d-flex container justify-content-center">
@@ -77,7 +89,16 @@ export default function Balance() {
           </div>
         )}
 
-        {!registerPage && (
+        {!!analyticsPage && (
+          <div className="d-flex container justify-content-center">
+            <div className="mt-4 me-3 p-4 shadow rounded-3 d-flex flex-column align-items-center">
+              <h3>Analytics Data</h3>
+              <Analytics />
+            </div>
+          </div>
+        )}
+
+        {!registerPage && !analyticsPage && (
           <div className="container-lg">
             <div className="row">
               <div className="col mt-4 me-3 p-3 container shadow rounded-3">

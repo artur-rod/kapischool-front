@@ -9,7 +9,6 @@ import Header from "../components/Header";
 
 function Login() {
   const history = useHistory();
-
   const cookies = new Cookies();
 
   const confirmCookie = cookies.get("token");
@@ -53,7 +52,7 @@ function Login() {
         <div className="w-25">
           <form onSubmit={onSubmit}>
             <div className="form-group mb-2">
-              <label for="email">Email address</label>
+              <label htmlFor="email">Email address</label>
               <input
                 type="email"
                 className="form-control"
@@ -64,7 +63,7 @@ function Login() {
               />
             </div>
             <div className="form-group mb-4">
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 className="form-control"
