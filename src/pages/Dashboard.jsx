@@ -18,7 +18,6 @@ export default function Balance() {
   const cookies = new Cookies();
   const confirmCookies = !cookies.get("token");
   const confirmAdminCookies = !cookies.get("admin");
-  console.log(confirmAdminCookies === confirmCookies);
 
   if (confirmAdminCookies !== confirmCookies) {
     Alert("warning", "Your don't have access here", "...");
